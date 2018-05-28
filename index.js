@@ -5,6 +5,7 @@ const Validator = require('is-my-json-valid')
 const isBlobMention = Validator(require('./schema/mention'))
 
 const INDEX_VERSION = 2
+const SEARCH_TERM_MIN = 3
 
 module.exports = {
   name: 'meme',
@@ -14,7 +15,7 @@ module.exports = {
     search: 'async'
   },
   init: (sbot) => {
-    const view = sbot._flumeUse('meme', FlumeView(INDEX_VERSION, 3, map))
+    const view = sbot._flumeUse('meme', FlumeView(INDEX_VERSION, SEARCH_TERM_MIN, map))
 
     return {
       query: view.query,
@@ -23,6 +24,8 @@ module.exports = {
 
     function search (opts, cb) {
       if (typeof opts === 'string') opts = { query: opts }
+      opts.query = opts.query.toLowerCase()
+      const validTerms = opts.query.split(' ').filter(s => s.length >= SEARCH_TERM_MIN)
 
       pull(
         view.query(opts),
@@ -33,7 +36,7 @@ module.exports = {
             getMentions(msg)
               .filter(isBlobMention)
               .filter(blobHasName)
-              .filter(m => m.name.indexOf(opts.query) > -1) // only mentions relevant to the query
+              .filter(containsSearchTerms)
               .forEach(({ link, name }) => {
                 if (!soFar[link]) soFar[link] = []
 
@@ -46,6 +49,11 @@ module.exports = {
           cb(null, result)
         })
       )
+
+      function containsSearchTerms (mention) {
+        const name = mention.name.toLowerCase()
+        return validTerms.every(term => name.indexOf(term) > -1)
+      }
     }
   }
 }
