@@ -41,6 +41,7 @@ module.exports = {
           const result = data.reduce((soFar, msg) => {
             getMentions(msg)
               .filter(isBlobMention)
+              .filter(blobHasName)
               .filter(containsSearchTerms)
               .forEach(({ link, name }) => {
                 if (!soFar[link]) soFar[link] = []
@@ -66,9 +67,14 @@ module.exports = {
 function map (msg) {
   return getMentions(msg)
     .filter(isBlobMention)
+    .filter(blobHasName)
     .map(m => m.name)
     .map(n => n.replace(imgExtRegEx, '').replace(spaceCharRegex, ' '))
     .join(' ')
+}
+
+function blobHasName(mention) {
+  return typeof(mention.name) === "string"
 }
 
 function getMentions (msg) {
