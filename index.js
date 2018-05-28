@@ -23,6 +23,7 @@ module.exports = {
 
     function search (opts, cb) {
       if (typeof opts === 'string') opts = { query: opts }
+      opts.query = opts.query.toLowerCase()
 
       pull(
         view.query(opts),
@@ -32,7 +33,7 @@ module.exports = {
           const result = data.reduce((soFar, msg) => {
             getMentions(msg)
               .filter(isBlobMention)
-              .filter(m => m.name.indexOf(opts.query) > -1) // only mentions relevant to the query
+              .filter(m => m.name.toLowerCase().indexOf(opts.query) > -1) // only mentions relevant to the query
               .forEach(({ link, name }) => {
                 if (!soFar[link]) soFar[link] = []
 
