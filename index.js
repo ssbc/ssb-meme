@@ -7,6 +7,9 @@ const isBlobMention = Validator(require('./schema/mention'))
 const INDEX_VERSION = 2
 const SEARCH_TERM_MIN = 3
 
+const imgExtRegEx = /\.(jpg|jpeg|png|gif|bmp|svg)$/i
+const spaceCharRegex = /(-|\.|_|\/|~|\s)/g
+
 module.exports = {
   name: 'meme',
   version: require('./package.json').version,
@@ -25,7 +28,10 @@ module.exports = {
     function search (opts, cb) {
       if (typeof opts === 'string') opts = { query: opts }
       opts.query = opts.query.toLowerCase()
-      const validTerms = opts.query.split(' ').filter(s => s.length >= SEARCH_TERM_MIN)
+
+      const validTerms = opts.query
+        .split(spaceCharRegex)
+        .filter(s => s.length >= SEARCH_TERM_MIN)
 
       pull(
         view.query(opts),
@@ -56,9 +62,6 @@ module.exports = {
     }
   }
 }
-
-const imgExtRegEx = /\.(jpg|jpeg|png|gif|bmp|svg)$/i
-const spaceCharRegex = /(-|\.|_|\/|~)/g
 
 function map (msg) {
   return getMentions(msg)
