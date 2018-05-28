@@ -55,9 +55,14 @@ const spaceCharRegex = /(-|\.|_|\/|~)/g
 function map (msg) {
   return getMentions(msg)
     .filter(isBlobMention)
+    .filter(blobHasName)
     .map(m => m.name)
     .map(n => n.replace(imgExtRegEx, '').replace(spaceCharRegex, ' '))
     .join(' ')
+}
+
+function blobHasName(mention) {
+  return typeof(mention.name) === "string"
 }
 
 function getMentions (msg) {
