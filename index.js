@@ -4,7 +4,7 @@ const Validator = require('is-my-json-valid')
 
 const isBlobMention = Validator(require('./schema/mention'))
 
-const INDEX_VERSION = 1
+const INDEX_VERSION = 2
 
 module.exports = {
   name: 'meme',
@@ -55,7 +55,7 @@ const spaceCharRegex = /(-|\.|_|\/|~)/g
 function map (msg) {
   return getMentions(msg)
     .filter(isBlobMention)
-    // .map(m => m.name)
+    .map(m => m.name)
     .map(n => n.replace(imgExtRegEx, '').replace(spaceCharRegex, ' '))
     .join(' ')
 }
