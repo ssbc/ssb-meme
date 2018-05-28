@@ -32,6 +32,7 @@ module.exports = {
           const result = data.reduce((soFar, msg) => {
             getMentions(msg)
               .filter(isBlobMention)
+              .filter(blobHasName)
               .filter(m => m.name.indexOf(opts.query) > -1) // only mentions relevant to the query
               .forEach(({ link, name }) => {
                 if (!soFar[link]) soFar[link] = []
