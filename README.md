@@ -9,7 +9,7 @@ var Scuttlebot = require('scuttlebot')
 
 Scuttlebot
   .use(require('scuttlebot/plugins/master'))
-  .use(require('ssb-memes'))
+  .use(require('ssb-meme'))
 
 var sbot = Scuttlebot(config) // see test/index.js for details
 
