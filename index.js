@@ -4,7 +4,7 @@ const Validator = require('is-my-json-valid')
 
 const isBlobMention = Validator(require('./schema/mention'))
 
-const INDEX_VERSION = 2
+const INDEX_VERSION = 3
 const SEARCH_TERM_MIN = 3
 
 const imgExtRegEx = /\.(jpg|jpeg|png|gif|bmp|svg)$/i
