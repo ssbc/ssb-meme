@@ -8,7 +8,6 @@
     "test": "test"
   },
   "dependencies": {
-    "flumeview-search": "^2.0.0",
     "is-my-json-valid": "^2.17.2",
     "ssb-ref": "^2.11.1"
   },
