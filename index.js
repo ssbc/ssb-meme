@@ -1,4 +1,3 @@
-const FlumeView = require('flumeview-search')
 const pull = require('pull-stream')
 const Validator = require('is-my-json-valid')
 
@@ -18,10 +17,9 @@ module.exports = {
     search: 'async'
   },
   init: (sbot) => {
-    const view = sbot._flumeUse('meme', FlumeView(INDEX_VERSION, SEARCH_TERM_MIN, map))
+    const { and, type, descending, startFrom, paginate, isPublic, toPullStream } = sbot.db.operators
 
     return {
-      query: view.query,
       search
     }
 
@@ -34,7 +32,16 @@ module.exports = {
         .filter(s => s.length >= SEARCH_TERM_MIN)
 
       pull(
-        view.query(opts),
+        pull(
+          sbot.db.query(
+            and(isPublic()),
+            startFrom(0),
+            paginate(opts.searchDepth || 1000),
+            descending(),
+            toPullStream()
+          )
+        ),
+        pull.flatten(),
         pull.collect((err, data) => {
           if (err) return cb(err)
 
