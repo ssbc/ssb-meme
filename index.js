@@ -17,7 +17,7 @@ module.exports = {
     search: 'async'
   },
   init: (sbot) => {
-    const { and, type, descending, startFrom, paginate, isPublic, toPullStream } = sbot.db.operators
+    const { and, type, descending, isPublic, toPullStream } = sbot.db.operators
 
     return {
       search
@@ -35,13 +35,11 @@ module.exports = {
         pull(
           sbot.db.query(
             and(isPublic()),
-            startFrom(0),
-            paginate(opts.searchDepth || 1000),
             descending(),
             toPullStream()
           )
         ),
-        pull.flatten(),
+	pull.take(opts.searchDepth || 1000),
         pull.collect((err, data) => {
           if (err) return cb(err)
 
