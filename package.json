@@ -13,7 +13,7 @@
     "ssb-ref": "^2.11.1"
   },
   "devDependencies": {
-    "file-type": "^8.0.0",
+    "file-type": "^16.5.4",
     "pull-stream": "^3.6.8",
     "scuttlebot": "^11.3.0",
     "ssb-blobs": "^1.1.5",
